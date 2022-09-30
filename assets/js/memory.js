@@ -1,17 +1,19 @@
-let arrayAnimali = ['🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '🐬', '🦊', '🐨', '🐰', '🐯', '🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '🐬', '🦊', '🐨', '🐯', '🐰'];
-//libreria per icone
-//https://html-css-js.com/html/character-codes/
+let arrayAnimali = [
+    '🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '🐬', 
+    '🦊', '🐨', '🐰', '🐯', '🐱', '🦉', '🐾', '🦁', 
+    '🦋', '🐛', '🐝', '🐬', '🦊', '🐨', '🐯', '🐰'];
+
 
 let arrayComparison = [];
 
 document.body.onload = startGame();
 
-// mi serviranno alcune variabili 1. interval 2. una agganciata alla classe find 
-// 3. una agganciata al'id modal 4. una agganciata alla classe timer
 
 
-//una funzione che serve a mescolare in modo random gli elementi dell'array che viene passato 
-// (l'array contiene le icone degli animali)
+var seconds = 0;
+var minutes = 0;
+var timer = document.getElementById('timer');
+
 function shuffle(a) {
     var currentIndex = a.length;
     var temporaryValue, randomIndex;
@@ -25,20 +27,12 @@ function shuffle(a) {
     }
     return a;
 }
-// una funzione che rimuove la classe active e chiama la funzione startGame()
-
-
-
-// la funzione startGame che pulisce il timer, dichiara un array vuoto, mescola casualmente l'array degli animali
-// (var arrayShuffle = shuffle(arrayAnimali);), aggancia il contenitore con id griglia, 
-// pulisce tutti gli elementi che eventualmente contiene
-// poi fa ciclo per creare i 24 div child -> aggiunge la class e l'elemento dell'array in basa la funzione timer e associa a tutti gli elementi (div) di classe icon l'evento cle all'indice progressivo
-// chiamick e le due funzioni definit sotto
 
 function startGame () {
+    clearInterval(myTimer);
     shuffle(arrayAnimali);
     let container = document.getElementById("griglia");
-
+    document.getElementById("modal").style.display = "none";
     container.innerHTML = "";
     for (let animale of arrayAnimali) {
         let div = document.createElement(`div`);
@@ -46,62 +40,66 @@ function startGame () {
         div.className = "tessera";
         div.innerHTML = `<span class="icon" onclick="displayIcon(event)">${animale}</span>`;
     }
-}
 
+
+    function timerMinSec() {
+        if (seconds < 60) {
+        seconds++;
+        timer.innerHTML = "Tempo: " + minutes + " min " + seconds + " sec";
+    } else {
+        minutes++;
+        seconds = 0;
+        timer.innerHTML = "Tempo: " + minutes + " min " + seconds + " sec";
+    }}
+
+    var myTimer = setInterval(timerMinSec, 1000);
+
+    if (seconds > 0 || minutes > 0) {
+        clearInterval(myTimer);
+        }
+    seconds= 0;
+    minutes= 0;
+}
 
 
 function displayIcon(eventClick) {
     var icon = document.getElementsByClassName("icon");
     var icons = [...icon];
-
-    /*
-    var icon = document.getElementsByClassName("icon");
-    var icons = [...icon];
-    è uguale a 
-    var icons = document.getElementsByClassName("icon");
-    //var icons = [...icon];
-    è un operatore che serve per passare un array come argomento:
-    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax 
-    https://www.tutorialspoint.com/es6/es6_operators.htm (cerca spread nella pagina)
-    */
-    //mette/toglie la classe show
    
     eventClick.target.classList.toggle("show");
 
-    //aggiunge l'oggetto su cui ha cliccato all'array del confronto
     arrayComparison.push(eventClick.target);
+    arrayComparison[0].classList.add("disabled");
 
     var len = arrayComparison.length;
-    //se nel confronto ci sono due elementi
     if (len === 2) {
-        //se sono uguali aggiunge la classe find
         if (arrayComparison[0].innerHTML === arrayComparison[1].innerHTML) {
             arrayComparison[0].classList.add("find", "disabled");
             arrayComparison[1].classList.add("find", "disabled");
             arrayComparison = [];
+            
+        
+            let check = icons.every(item => item.classList.contains('disabled'))
+            if (check) {
+            document.getElementById("modal").style.display = "block";
+            document.getElementById("tempoTrascorso").innerHTML = "Tempo: " + minutes + " min " + seconds + " sec";
+            }
         } else {
-            //altrimenti (ha sbagliato) aggiunge solo la classe disabled
             icons.forEach(function(item) {
                 item.classList.add('disabled');
             });
-            // con il timeout rimuove  la classe show per nasconderli
             setTimeout(function() {
                 arrayComparison[0].classList.remove("show");
                 arrayComparison[1].classList.remove("show");
                 icons.forEach(function(item) {
                     item.classList.remove('disabled');
                     for (var i = 0; i < arrayComparison.length; i++) {
-                        arrayComparison[i].classList.add("disabled");
+                        arrayComparison[i].classList.remove("disabled");
                     }
+                    
                 });
                 arrayComparison = [];
             }, 700);
         }
-    }
+    }       
 }
-
-// una funzione che viene mostrata alla fine quando sono tutte le risposte esatte
-
-// una funzione che nasconde la modale alla fine e riavvia il gioco
-
-// una funzione che calcola il tempo e aggiorna il contenitore sotto
