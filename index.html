@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Memory Game</title>
+</head>
+
+<body>
+
+
+
+    <div class="container icon-grid" id="griglia">
+    </div>
+    <div class="container text-center">
+        <input type="button" id="button" class="button" onclick=startGame() value="Ricomincia">
+        <div class="timer">Tempo: 0 min 0 sec</div>
+    </div>
+
+    <div id="modal">
+        <div class="content">
+            <h2>Congratulazioni! Hai risolto il gioco in: </h2>
+            <p><span id="tempoTrascorso"> </span> </p>
+            <p><input type="button" class="button" onclick=playAgain() value="Altra partita"></p>
+        </div>
+    </div>
+
+    <script src="js/memory.js">
+    </script>
+</body>
+
+</html>
