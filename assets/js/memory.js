@@ -2,7 +2,6 @@ let arrayAnimali = ['🐱', '🦉', '🐾', '🦁', '🦋', '🐛', '🐝', '�
 //libreria per icone
 //https://html-css-js.com/html/character-codes/
 
-
 let arrayComparison = [];
 
 document.body.onload = startGame();
@@ -28,15 +27,30 @@ function shuffle(a) {
 }
 // una funzione che rimuove la classe active e chiama la funzione startGame()
 
+
+
 // la funzione startGame che pulisce il timer, dichiara un array vuoto, mescola casualmente l'array degli animali
 // (var arrayShuffle = shuffle(arrayAnimali);), aggancia il contenitore con id griglia, 
 // pulisce tutti gli elementi che eventualmente contiene
-// poi fa ciclo per creare i 24 div child -> aggiunge la class e l'elemento dell'array in base all'indice progressivo
-// chiama la funzione timer e associa a tutti gli elementi (div) di classe icon l'evento click e le due funzioni definit sotto
+// poi fa ciclo per creare i 24 div child -> aggiunge la class e l'elemento dell'array in basa la funzione timer e associa a tutti gli elementi (div) di classe icon l'evento cle all'indice progressivo
+// chiamick e le due funzioni definit sotto
+
+function startGame () {
+    shuffle(arrayAnimali);
+    let container = document.getElementById("griglia");
+
+    container.innerHTML = "";
+    for (let animale of arrayAnimali) {
+        let div = document.createElement(`div`);
+        container.appendChild(div)
+        div.className = "tessera";
+        div.innerHTML = `<span class="icon" onclick="displayIcon(event)">${animale}</span>`;
+    }
+}
 
 
 
-function displayIcon() {
+function displayIcon(eventClick) {
     var icon = document.getElementsByClassName("icon");
     var icons = [...icon];
 
@@ -50,11 +64,12 @@ function displayIcon() {
     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax 
     https://www.tutorialspoint.com/es6/es6_operators.htm (cerca spread nella pagina)
     */
-
     //mette/toglie la classe show
-    this.classList.toggle("show");
+   
+    eventClick.target.classList.toggle("show");
+
     //aggiunge l'oggetto su cui ha cliccato all'array del confronto
-    arrayComparison.push(this);
+    arrayComparison.push(eventClick.target);
 
     var len = arrayComparison.length;
     //se nel confronto ci sono due elementi
@@ -75,8 +90,8 @@ function displayIcon() {
                 arrayComparison[1].classList.remove("show");
                 icons.forEach(function(item) {
                     item.classList.remove('disabled');
-                    for (var i = 0; i < iconsFind.length; i++) {
-                        iconsFind[i].classList.add("disabled");
+                    for (var i = 0; i < arrayComparison.length; i++) {
+                        arrayComparison[i].classList.add("disabled");
                     }
                 });
                 arrayComparison = [];
@@ -85,7 +100,7 @@ function displayIcon() {
     }
 }
 
-//una funzione che viene mostrata alla fine quando sono tutte le risposte esatte
+// una funzione che viene mostrata alla fine quando sono tutte le risposte esatte
 
 // una funzione che nasconde la modale alla fine e riavvia il gioco
 
